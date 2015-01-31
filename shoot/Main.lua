@@ -1,7 +1,7 @@
 -- shoot
 
 function setup()
-    bullet = Mover(vec2(WIDTH/2, HEIGHT/2))
+    bullet = Bullet(vec2(WIDTH/2, HEIGHT/2))
 end
 
 -- This function gets called once every frame
