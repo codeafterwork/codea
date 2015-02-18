@@ -24,8 +24,9 @@ function Maze:init(width, height)
     for i=1, width*height do
         self.cells[i]:setPass()
     end
-    self.print_door = " "
-    self.print_wall = "#"
+    self.door = " "
+    self.wall = "."
+    self.room = " "
 end
 
 function Maze:cell(x, y)
@@ -64,29 +65,28 @@ function Maze:generate()
     end
 end
 
-function Maze:print_at(x, y, d)
-    return self:cell(x, y).pass[d].blocked and self.print_wall or self.print_door
+function Maze:print_at(x, y, direction, zoom)
+    return self:cell(x, y).pass[direction].blocked and string.rep(self.wall, zoom) or string.rep(self.door, zoom)
 end
 
-function Maze:__tostring()
-    local o = ""
-    
+function Maze:tostring(zoom)
+    local n = zoom or 1
     local line = ""
-    for i=1, self.width do
-        line=line .. self.print_wall .. self:print_at(i, 1, "n")
+    for x=1, self.width do
+        line=line..self.wall..self:print_at(x, 1, "n", n)
     end
-    line = line .. self.print_wall
-    o = o .. line .. "\n"
-    
+    line = line..self.wall.."\n"
+    local o = line
+
     for y=1, self.height do
-        local line = self:print_at(1, y, "w")
-        local underline = self.print_wall
+        local line = self:print_at(1, y, "w", 1)
+        local underline = self.wall
         for x=1, self.width do
-            line = line .. " " .. self:print_at(x, y, "e")
-            underline = underline .. self:print_at(x, y, "s").. self.print_wall
+            line = line..string.rep(self.room, n)..self:print_at(x, y, "e", 1)
+            underline = underline..self:print_at(x, y, "s", n)..self.wall
         end
-        o = o .. line .. "\n" .. underline .. "\n"
+        o = o..string.rep(line.."\n", n)..underline.."\n"
     end
-    
+
     return o
 end
