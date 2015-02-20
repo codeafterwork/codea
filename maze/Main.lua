@@ -2,24 +2,40 @@
 
 -- Use this function to perform your initial setup
 function setup()
-    maze = Maze(3, 3)
+    math.randomseed(os.time())
+
+    maze_width = 4
+    maze_height = 4
+    maze_zoom = 4
+    
+    maze = Maze(maze_width, maze_height)
+    maze.start_x, maze.start_y = start_point(maze_width, maze_height)
     maze:generate()
     
+    map = Map(str2tbl(maze:tostring(maze_zoom)))
+        
+    --[[
     print(maze:tostring())
     print(maze:tostring(2)) -- zoom
     print(maze:tostring(3))
-
-    --log.printTable({t = maze:toString(4)})
+    
+    print(dump(str2tbl(maze:tostring())))
+    
+    log.printTable({
+    s = maze:tostring(),
+    m = dump(str2tbl(maze:tostring()))
+    })
+    --]]
 end
 
--- This function gets called once every frame
 function draw()
-    -- This sets a dark background color
     background(40, 40, 50)
+    strokeWidth(2)
+    stroke(100, 100, 100)
     
-    -- This sets the line thickness
-    strokeWidth(5)
-    
-    -- Do your drawing here
-    
+    map:draw()
+end
+
+function touched(touch)
+    map:touched(touch)
 end

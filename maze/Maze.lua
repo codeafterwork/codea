@@ -27,6 +27,8 @@ function Maze:init(width, height)
     self.door = " "
     self.wall = "."
     self.room = " "
+    self.start_x = 1
+    self.start_y = 1
 end
 
 function Maze:cell(x, y)
@@ -43,10 +45,11 @@ function Maze:reset()
 end
 
 function Maze:generate()
+    print("start ", self.start_x, self.start_y)
     math.randomseed(os.time())
     self:reset()
     local stack = Stack()
-    local cell = self:cell(1, 1)
+    local cell = self:cell(self.start_x, self.start_y)
     while true do
         cell.visited = true
         local neighbours = cell:neighbours()
